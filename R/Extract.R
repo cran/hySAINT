@@ -188,10 +188,15 @@ sample_prob <- function(X, myParent, EVAoutput, heredity = "Strong", r1, r2){
   top_20_percent <- ceiling(0.2*n_rows)
   row_probabilities <- rep(0.1, n_rows)
   row_probabilities[1:top_20_percent] <- 0.9
-  even_numbers <- seq(2, (n_rows-2), by = 2)
+  if (n_rows == 3 | n_rows == 2){
+    even_numbers <- 2
+  }else{
+    even_numbers <- seq(2, (n_rows-2), by = 2)
+  }
+
   num_rows_to_sample <- mysample(even_numbers,1)
-  sampled_rows <- myParent[mysample(n_rows, size = num_rows_to_sample, replace = FALSE, prob = row_probabilities), , drop = FALSE]
-  CPMatrix <- myParent[,1:max_model_size]
+  sampled_rows <- myParent[sample(n_rows, size = num_rows_to_sample, replace = TRUE, prob = row_probabilities), , drop = FALSE]
+  CPMatrix <- sampled_rows
   CMatrix <-  matrix(0, nrow=choose(dim(CPMatrix)[1],2),ncol=max_model_size)
   tempcount <- 0
   for (i in 1:(dim(CPMatrix)[1]-1)) {
